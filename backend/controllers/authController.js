@@ -18,6 +18,45 @@ exports.testController = async (req, res) => {
   }
 };
 
+  // Login User
+
+exports.loginUser = async (req, res) => {
+  try {
+
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
+    }
+
+    if (user.password !== password) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid credentials"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      user
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
+  }
+};
+
+  // forgotPassword
+
 exports.forgotPassword = async (req, res) => {
   try {
 
@@ -45,6 +84,8 @@ exports.forgotPassword = async (req, res) => {
   }
 };
 
+  // resetPassword
+
 exports.resetPassword = async (req, res) => {
   try {
     const { token } = req.params;
@@ -70,6 +111,8 @@ exports.resetPassword = async (req, res) => {
   }
 };
 
+  // registerUser
+  
 exports.registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
