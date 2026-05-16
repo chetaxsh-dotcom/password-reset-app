@@ -7,23 +7,27 @@ function ForgotPassword() {
 
   const [email, setEmail] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const API = import.meta.env.VITE_API_URL;
 
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/api/auth/forgot-password",
-        { email }
-      );
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-      toast.success(res.data.message || "Reset link sent");
+  try {
 
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Request failed"
-      );
-    }
-  };
+    const res = await axios.post(
+      `${API}/api/auth/forgot-password`,
+      { email }
+    );
+
+    toast.success(res.data.message);
+
+  } catch (error) {
+
+    toast.error(
+      error.response?.data?.message || "Request failed"
+    );
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-500">

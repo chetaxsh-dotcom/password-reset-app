@@ -112,7 +112,7 @@ exports.resetPassword = async (req, res) => {
 };
 
   // registerUser
-  
+
 exports.registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
