@@ -63,24 +63,42 @@ exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user) {                                       
-      return res.status(404).json({ message: "User not found" });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      });
     }
-    const token = Math.random().toString(36).substring(2);
 
+    // generate secure token
+    const token = crypto.randomBytes(32).toString("hex");
+
+    // save token in DB
     user.resetToken = token;
-    await user.save();
-  
-    const resetLink = `http://localhost:5173/reset-password/${token}`;
 
-    console.log("Reset Token:", token);
+    await user.save({ validateBeforeSave: false });
+
+    // create reset link
+    const resetLink =
+      `${process.env.FRONTEND_URL}/reset-password/${token}`;
+
+    // show link in backend terminal
     console.log("RESET LINK:", resetLink);
-    
-    res.json({ message: "Reset link sent" });
+
+    res.status(200).json({
+      success: true,
+      message: "Reset link sent"
+    });
 
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
 
+    console.log(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
   }
 };
 
@@ -99,7 +117,7 @@ exports.resetPassword = async (req, res) => {
     user.password = req.body.password;
     user.resetToken = undefined;
 
-    await user.save();
+    await user.save({ validateBeforeSave: false });
 
     res.json({
       success: true,
