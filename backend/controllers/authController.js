@@ -71,11 +71,11 @@ exports.forgotPassword = async (req, res) => {
     user.resetToken = token;
     await user.save();
   
-    console.log("Reset Token:", token);
-    console.log(
-      `Reset Link: http://localhost:5173/reset-password/${token}`
-    );    
+    const resetLink = `http://localhost:5173/reset-password/${token}`;
 
+    console.log("Reset Token:", token);
+    console.log("RESET LINK:", resetLink);
+    
     res.json({ message: "Reset link sent" });
 
   } catch (error) {
