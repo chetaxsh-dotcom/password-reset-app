@@ -1,7 +1,6 @@
 const User = require("../models/User");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
-const { registerUser } = require("../controllers/authController");
 
 // test route
 exports.testController = async (req, res) => {
